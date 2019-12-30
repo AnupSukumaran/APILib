@@ -8,8 +8,9 @@ public enum APIMethod: String {
 public struct APILib {
     
     public typealias JSON = [String: AnyObject]
+    public typealias OJSON = [String : Any?]
     
-    public static func returnUrl(_ parameters: JSON?, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil) -> URL {
+    public static func returnUrl(_ parameters: OJSON?, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil) -> URL {
         
         var components = URLComponents()
         components.scheme = apiComponents.scheme
@@ -19,7 +20,7 @@ public struct APILib {
         
         if let params = parameters {
             for (key, value) in params {
-                let queryItem = URLQueryItem(name: key, value: "\(value)")
+                let queryItem = URLQueryItem(name: key, value: "\(value ?? "")")
                 components.queryItems!.append(queryItem)
             }
         }
@@ -29,7 +30,7 @@ public struct APILib {
     }
     
     //MARK: Make Post Request With Header
-    public static func makeRequest(method: APIMethod, params: JSON, withHeader: (authID: String? , headerKey: String)? = nil,    apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
+    public static func makeRequest(method: APIMethod, params: OJSON, withHeader: (authID: String? , headerKey: String)? = nil,    apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
         
         var req: URLRequest!
         
@@ -52,7 +53,7 @@ public struct APILib {
         return req
     }
     
-    public static func dictToJson_Convertor(_ params: JSON) -> NSString? {
+    public static func dictToJson_Convertor(_ params: OJSON) -> NSString? {
         
         let jsonData = try! JSONSerialization.data(withJSONObject: params)
         let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)
