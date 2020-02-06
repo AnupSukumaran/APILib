@@ -32,15 +32,18 @@ public struct APILib {
     }
     
     //MARK: Make Post Request With Header
-    public static func makeRequest(method: APIMethod, params: OJSON? = nil, encodedParams: Encodable? = nil, withHeader: header? = nil, apiComponents: apiComp, withPathExtension: String? = nil  ) -> URLRequest {
+    public static func makeRequest<T: Encodable>(method: APIMethod, params: OJSON? = nil, encodedParams: T? = nil, withHeader: header? = nil, apiComponents: apiComp, withPathExtension: String? = nil  ) -> URLRequest {
         
         var req: URLRequest!
         
         if method == .post {
             req = URLRequest(url: APILib.returnUrl([:], apiComponents: apiComponents, withPathExtension: withPathExtension))
+            if let encoParams = encodedParams {
+               do {
+                   req.httpBody =  try JSONEncoder().encode(encoParams)
+               } catch {}
+            }
             
-            req.httpBody = JSONEncoder().encode(encodedParams)
-
         } else {
             req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
         }
@@ -48,8 +51,8 @@ public struct APILib {
         req.httpMethod = method.rawValue
         req.timeoutInterval = 60
         
-        if let head = withHeader, let auth = head.authID {
-            req.addValue(auth, forHTTPHeaderField: head.headerKey)
+        if let head = withHeader, let value = head.headerValue {
+            req.addValue(value, forHTTPHeaderField: head.headerKey)
         }
 
         return req
