@@ -9,6 +9,8 @@ public struct APILib {
     
     public typealias JSON = [String: AnyObject]
     public typealias OJSON = [String : Any?]
+    public typealias apiComp = (scheme: String, host: String, path: String)
+    public typealias header = (headerValue: String? , headerKey: String)
     
     public static func returnUrl(_ parameters: OJSON?, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil) -> URL {
         
@@ -30,15 +32,15 @@ public struct APILib {
     }
     
     //MARK: Make Post Request With Header
-    public static func makeRequest(method: APIMethod, params: OJSON, withHeader: (authID: String? , headerKey: String)? = nil,    apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
+    public static func makeRequest(method: APIMethod, params: OJSON? = nil, encodedParams: Encodable? = nil, withHeader: header? = nil, apiComponents: apiComp, withPathExtension: String? = nil  ) -> URLRequest {
         
         var req: URLRequest!
         
         if method == .post {
             req = URLRequest(url: APILib.returnUrl([:], apiComponents: apiComponents, withPathExtension: withPathExtension))
-            if let jsonBody = APILib.dictToJson_Convertor(params) as String?  {
-               req.httpBody = jsonBody.data(using: String.Encoding.utf8)
-            }
+            
+            req.httpBody = JSONEncoder().encode(encodedParams)
+
         } else {
             req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
         }
@@ -66,5 +68,5 @@ public struct APILib {
         }
         return true
     }
-    
+        
 }
