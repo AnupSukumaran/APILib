@@ -30,13 +30,13 @@ public struct APILib {
     }
     
     //MARK: Make Post Request With Header
-    public static func makeRequest(method: APIMethod, params: OJSON, withHeader: (headerVal: String? , headerKey: String)? = nil,    apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
+    public static func makeRequest(method: APIMethod, params: OJSON? = nil, withHeader: (headerVal: String? , headerKey: String)? = nil,    apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
         
         var req: URLRequest!
         
         if method == .post {
             req = URLRequest(url: APILib.returnUrl([:], apiComponents: apiComponents, withPathExtension: withPathExtension))
-            if let jsonBody = APILib.dictToJson_Convertor(params) as String?  {
+            if let p = params, let jsonBody = APILib.dictToJson_Convertor(p) as String?  {
                req.httpBody = jsonBody.data(using: String.Encoding.utf8)
             }
         } else {
