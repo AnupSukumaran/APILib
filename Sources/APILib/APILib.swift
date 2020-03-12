@@ -46,7 +46,7 @@ public struct APILib {
         case .get:
             req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
             
-        case .delete: break
+        case .delete: continue
         
         }
         
@@ -77,7 +77,7 @@ public struct APILib {
         case .get:
            req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
            
-        case .delete: break
+        case .delete: continue
 
         }
         
