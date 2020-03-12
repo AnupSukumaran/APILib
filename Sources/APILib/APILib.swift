@@ -61,7 +61,7 @@ public struct APILib {
     }
     
     //MARK: Make Post Request With Header
-    public static func makeRequestWithEnco<T: Encodable>(method: APIMethod, params: OJSON? = nil, encodedParams: T? = nil, withHeader: (headerVal: String? , headerKey: String)? = nil, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
+    public static func makeRequestWithEnco<T: Encodable>(method: APIMethod, params: OJSON? = nil, encodedParams: T?, withHeader: (headerVal: String? , headerKey: String)? = nil, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
         
         var req: URLRequest!
         
