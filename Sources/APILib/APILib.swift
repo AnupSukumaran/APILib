@@ -36,13 +36,18 @@ public struct APILib {
         
         var req: URLRequest!
         
-        if method == .post {
+        switch  method {
+        case .post, .put:
             req = URLRequest(url: APILib.returnUrl([:], apiComponents: apiComponents, withPathExtension: withPathExtension))
             if let p = params, let jsonBody = APILib.dictToJson_Convertor(p) as String?  {
                req.httpBody = jsonBody.data(using: String.Encoding.utf8)
             }
-        } else {
+            
+        case .get:
             req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
+            
+        case .delete: break
+        
         }
         
         req.httpMethod = method.rawValue
@@ -60,16 +65,20 @@ public struct APILib {
         
         var req: URLRequest!
         
-        if method == .post {
-            req = URLRequest(url: APILib.returnUrl([:], apiComponents: apiComponents, withPathExtension: withPathExtension))
-            if let encoParams = encodedParams {
-               do {
-                   req.httpBody =  try JSONEncoder().encode(encoParams)
-               } catch {}
-            }
-            
-        } else {
-            req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
+        switch  method {
+        case .post, .put:
+           req = URLRequest(url: APILib.returnUrl([:], apiComponents: apiComponents, withPathExtension: withPathExtension))
+           if let encoParams = encodedParams {
+              do {
+                  req.httpBody =  try JSONEncoder().encode(encoParams)
+              } catch {}
+           }
+           
+        case .get:
+           req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
+           
+        case .delete: break
+
         }
         
         req.httpMethod = method.rawValue
