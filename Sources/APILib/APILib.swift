@@ -43,11 +43,8 @@ public struct APILib {
                req.httpBody = jsonBody.data(using: String.Encoding.utf8)
             }
             
-        case .get:
+        case .get, .delete:
             req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
-            
-        case .delete: break
-        
         }
         
         req.httpMethod = method.rawValue
@@ -74,11 +71,8 @@ public struct APILib {
               } catch {}
            }
            
-        case .get:
+        case .get, .delete:
            req = URLRequest(url: APILib.returnUrl(params, apiComponents: apiComponents, withPathExtension: withPathExtension))
-           
-        case .delete: break
-
         }
         
         req.httpMethod = method.rawValue
