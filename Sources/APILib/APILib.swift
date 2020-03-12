@@ -3,6 +3,8 @@ import UIKit
 public enum APIMethod: String {
     case post = "POST"
     case get = "GET"
+    case delete = "DELETE"
+    case put = "PUT"
 }
 
 public struct APILib {
