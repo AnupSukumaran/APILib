@@ -51,20 +51,20 @@ public struct APILib {
         req.timeoutInterval = 60
         
         if let headers = withHeaders {
-            headers.forEach{
-                req = addheaders(req: req, header: $0)
-            }
+            req = addheaders(req: req, headers: headers)
         }
     
         return req
     }
     
-    public static func addheaders(req: URLRequest, header: (headerVal: String? , headerKey: String)?) -> URLRequest {
+    public static func addheaders(req: URLRequest, headers: [(headerVal: String? , headerKey: String)?]) -> URLRequest {
         
         var newReq: URLRequest = req
         
-        if let h = header, let auth = h.headerVal {
-            newReq.addValue(auth, forHTTPHeaderField: h.headerKey)
+        headers.forEach{
+            if let h = $0, let auth = h.headerVal {
+                newReq.addValue(auth, forHTTPHeaderField: h.headerKey)
+            }
         }
         
         return newReq
@@ -92,9 +92,7 @@ public struct APILib {
         req.timeoutInterval = 60
         
         if let headers = withHeaders {
-            headers.forEach{
-                req = addheaders(req: req, header: $0)
-            }
+            req = addheaders(req: req, headers: headers)
         }
     
         return req
