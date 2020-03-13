@@ -32,7 +32,7 @@ public struct APILib {
     }
     
     //MARK: Make Post Request With Header
-    public static func makeRequest(method: APIMethod, params: OJSON? = nil, withHeader: (headerVal: String? , headerKey: String)? = nil,    apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
+    public static func makeRequest(method: APIMethod, params: OJSON? = nil, withHeaders: [(headerVal: String? , headerKey: String)?]? = nil, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
         
         var req: URLRequest!
         
@@ -50,15 +50,28 @@ public struct APILib {
         req.httpMethod = method.rawValue
         req.timeoutInterval = 60
         
-        if let head = withHeader, let auth = head.headerVal {
-            req.addValue(auth, forHTTPHeaderField: head.headerKey)
+        if let headers = withHeaders {
+            headers.forEach{
+                req = addheaders(req: req, header: $0)
+            }
         }
-
+    
         return req
     }
     
+    public static func addheaders(req: URLRequest, header: (headerVal: String? , headerKey: String)?) -> URLRequest {
+        
+        var newReq: URLRequest = req
+        
+        if let h = header, let auth = h.headerVal {
+            newReq.addValue(auth, forHTTPHeaderField: h.headerKey)
+        }
+        
+        return newReq
+    }
+    
     //MARK: Make Post Request With Header
-    public static func makeRequestWithEnco<T: Encodable>(method: APIMethod, params: OJSON? = nil, encodedParams: T?, withHeader: (headerVal: String? , headerKey: String)? = nil, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
+    public static func makeRequestWithEnco<T: Encodable>(method: APIMethod, params: OJSON? = nil, encodedParams: T?, withHeaders: [(headerVal: String? , headerKey: String)?]? = nil, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil  ) -> URLRequest {
         
         var req: URLRequest!
         
@@ -78,10 +91,12 @@ public struct APILib {
         req.httpMethod = method.rawValue
         req.timeoutInterval = 60
         
-        if let head = withHeader, let value = head.headerVal {
-            req.addValue(value, forHTTPHeaderField: head.headerKey)
+        if let headers = withHeaders {
+            headers.forEach{
+                req = addheaders(req: req, header: $0)
+            }
         }
-
+    
         return req
     }
     
