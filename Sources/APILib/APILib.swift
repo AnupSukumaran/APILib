@@ -49,6 +49,7 @@ public struct APILib {
         
         req.httpMethod = method.rawValue
         req.timeoutInterval = 60
+        req.cachePolicy = .reloadRevalidatingCacheData
         
         if let headers = withHeaders {
             req = addheaders(req: req, headers: headers)
@@ -90,6 +91,7 @@ public struct APILib {
         
         req.httpMethod = method.rawValue
         req.timeoutInterval = 60
+        req.cachePolicy = .reloadRevalidatingCacheData
         
         if let headers = withHeaders {
             req = addheaders(req: req, headers: headers)
