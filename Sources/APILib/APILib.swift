@@ -11,12 +11,13 @@ public struct APILib {
     
     public typealias JSON = [String: AnyObject]
     public typealias OJSON = [String : Any?]
-   
+    public static var portNum: Int?
     public static func returnUrl(_ parameters: OJSON?, apiComponents: (scheme: String, host: String, path: String), withPathExtension: String? = nil) -> URL {
         
         var components = URLComponents()
         components.scheme = apiComponents.scheme
         components.host = apiComponents.host
+        components.port = portNum
         components.path = apiComponents.path + (withPathExtension ?? "")
         components.queryItems = [URLQueryItem]()
         
@@ -26,7 +27,7 @@ public struct APILib {
                 components.queryItems!.append(queryItem)
             }
         }
-
+        
         guard let url = components.url else {fatalError("URL Not valid")}
         return url
     }
